@@ -22,39 +22,38 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.mockito.stubbing.Answer;
 
 @Entity
 @Table(name = "ATTEMPT")
 public class Attempt {
 	
 	private int id;
-	private Account account;
-	private Quiz quiz;
-	private Set<Answer> answers;
+	private int accountId;
+	private int quizId; //need Quiz object
+	private HashSet<Integer> answers; //get from Quiz service
 	private Date createdDate;
 	private double score;
 
-	public Attempt(int id, Account account, Quiz quiz, Set<Answer> answers) {
+	public Attempt(int id, int accountId, int quizId, HashSet<Integer> answers) {
 		super();
 		this.id = id;
-		this.account = account;
-		this.quiz = quiz;
+		this.accountId = accountId;
+		this.quizId = quizId;
 		this.answers = answers;
 	}
 
-	public Attempt(Account account, Quiz quiz, Set<Answer> answers) {
+	public Attempt(int accountId, int quizId, HashSet<Integer> answers) {
 		super();
-		this.account = account;
-		this.quiz = quiz;
+		this.accountId = accountId;
+		this.quizId = quizId;
 		this.answers = answers;
 	}
 
-	public Attempt(Account account, Quiz quiz) {
+	public Attempt(int accountId, int quizId) {
 		super();
-		this.account = account;
-		this.quiz = quiz;
-		this.answers = new HashSet<Answer>();
+		this.accountId = accountId;
+		this.quizId = quizId;
+		this.answers = new HashSet<Integer>();
 	}
 	
 	public Attempt() {
@@ -73,33 +72,26 @@ public class Attempt {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@JoinColumn(name = "ACCOUNT_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_ATTEMPT_ACCOUNT"))
-	public Account getAccount() {
-		return account;
+	@Column(name = "ACCOUNT_ID")
+	public int getAccountId() {
+		return accountId;
+	}
+	
+	public void setAccountId(int id) {
+		this.accountId = id;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	@Column(name = "QUIZ_ID")
+	public int getQuizId() {
+		return quizId;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@JoinColumn(name = "QUIZ_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_ATTEMPT_QUIZ"))
-	public Quiz getQuiz() {
-		return quiz;
+	public void setQuizId(int quizId) {
+		this.quizId = quizId;
 	}
 
-	public void setQuiz(Quiz quiz) {
-		this.quiz = quiz;
-	}
-
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@JoinTable(name = "ATTEMPT_ANSWER", joinColumns = @JoinColumn(name = "ATTEMPT_ID", referencedColumnName = "ATTEMPT_ID"), inverseJoinColumns = @JoinColumn(name = "ANSWER_ID", referencedColumnName = "ANSWER_ID"))
-	public Set<Answer> getAnswers() {
-		return answers;
-	}
-
-	public void setAnswers(Set<Answer> answers) {
+	@Column(name = "")
+	public void setAnswers(HashSet<Integer> answers) {
 		this.answers = answers;
 	}
 
@@ -114,17 +106,12 @@ public class Attempt {
 		this.createdDate = createdDate;
 	}
 
+	@Column(name = "SCORE")
 	public double getScore() {
 		return score;
 	}
 
 	public void setScore(double score) {
 		this.score = score;
-	}
-
-	@Override
-	public String toString() {
-		return "Attempt [id=" + id + ", account=" + account + ", quiz=" + quiz + ", answers=" + answers
-				+ ", createdDate=" + createdDate + "]";
 	}
 }

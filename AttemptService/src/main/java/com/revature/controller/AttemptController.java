@@ -24,4 +24,9 @@ public class AttemptController {
 	public ResponseEntity<AttemptDTO> getAttempt(@PathVariable int id) {
 		return new ResponseEntity<AttemptDTO>(new AttemptDTO(attemptService.getAttemptById(id)), HttpStatus.OK);
 	}
+	
+	@GetMapping("/{email}")
+	public ResponseEntity<AttemptDTO> getAttempt(@PathVariable String email) {
+		return new ResponseEntity<AttemptDTO>(new AttemptDTO(attemptService.getAttemptByUser(email)), HttpStatus.OK);
+	}
 }
