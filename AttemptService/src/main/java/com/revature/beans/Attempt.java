@@ -4,18 +4,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -29,31 +23,32 @@ public class Attempt {
 	
 	private int id;
 	private int accountId;
-	private int quizId; //need Quiz object
-	private HashSet<Integer> answers; //get from Quiz service
-	private Date createdDate;
+	private int quizId; 
+	private Set<AttemptAnswer> attemptAnswers;
+	private Date dateCreated;
 	private double score;
+	private boolean isComplete;
 
-	public Attempt(int id, int accountId, int quizId, HashSet<Integer> answers) {
+	public Attempt(int id, int accountId, int quizId, Set<AttemptAnswer> attemptAnswers, double score, boolean isComplete) {
 		super();
 		this.id = id;
 		this.accountId = accountId;
 		this.quizId = quizId;
-		this.answers = answers;
+		this.attemptAnswers = attemptAnswers;
 	}
 
-	public Attempt(int accountId, int quizId, HashSet<Integer> answers) {
+	public Attempt(int accountId, int quizId, Set<AttemptAnswer> attemptAnswers) {
 		super();
 		this.accountId = accountId;
 		this.quizId = quizId;
-		this.answers = answers;
+		this.attemptAnswers = attemptAnswers;
 	}
 
 	public Attempt(int accountId, int quizId) {
 		super();
 		this.accountId = accountId;
 		this.quizId = quizId;
-		this.answers = new HashSet<Integer>();
+		this.attemptAnswers = new HashSet<AttemptAnswer>();
 	}
 	
 	public Attempt() {
@@ -89,21 +84,25 @@ public class Attempt {
 	public void setQuizId(int quizId) {
 		this.quizId = quizId;
 	}
-
-	@Column(name = "")
-	public void setAnswers(HashSet<Integer> answers) {
-		this.answers = answers;
+	
+	@OneToMany
+	public Set<AttemptAnswer> getAttemptAnswers() {
+		return attemptAnswers;
+	}
+	
+	public void setAttemptAnswers(Set<AttemptAnswer> attemptAnswers) {
+		this.attemptAnswers = attemptAnswers;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
-	@Column(name = "CreatedDate", updatable = false)
-	public Date getCreatedDate() {
-		return createdDate;
+	@Column(name = "DATE_CREATED", updatable = false)
+	public Date getDateCreated() {
+		return dateCreated;
 	}
 
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
 	@Column(name = "SCORE")
@@ -113,5 +112,14 @@ public class Attempt {
 
 	public void setScore(double score) {
 		this.score = score;
+	}
+
+	@Column(name = "ISCOMPLETE")
+	public boolean getIsComplete() {
+		return isComplete;
+	}
+
+	public void setIsComplete(boolean isComplete) {
+		this.isComplete = isComplete;
 	}
 }
