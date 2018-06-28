@@ -69,11 +69,11 @@ public class AttemptDTO {
 		this.score = score;
 	}
 
-	public boolean isComplete() {
+	public boolean getIsComplete() {
 		return isComplete;
 	}
 
-	public void setComplete(boolean isComplete) {
+	public void setIsComplete(boolean isComplete) {
 		this.isComplete = isComplete;
 	}
 

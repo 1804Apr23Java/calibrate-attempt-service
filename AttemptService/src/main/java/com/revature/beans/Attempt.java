@@ -64,7 +64,7 @@ public class Attempt {
 	public Attempt(AttemptDTO a) {
 		this.accountId = a.getAccountId();
 		this.quizId = a.getQuizId();
-		this.isComplete = a.isComplete();
+		this.isComplete = a.getIsComplete();
 		this.dateCreated = a.getDateCreated();
 		this.score = a.getScore();
 	}
