@@ -25,11 +25,18 @@ public class AttemptAnswer {
 	public AttemptAnswer() {
 		super();
 	}
-	
+
+
+	public void setCorrect(boolean isCorrect) {
+		this.isCorrect = isCorrect;
+	}
+
+
+
 	public AttemptAnswer(AttemptAnswerDTO a, Attempt att) {
 		this.id = a.getId();
 		this.answerId = a.getAnswerId();
-		this.isCorrect = a.isCorrent();
+		this.isCorrect = a.getIsCorrect();
 		this.attempt = att;
 	}
 

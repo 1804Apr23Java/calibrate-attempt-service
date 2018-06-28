@@ -2,17 +2,10 @@ package com.revature.dto;
 
 import java.util.Date;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.revature.beans.Attempt;
-import com.revature.service.AttemptService;
 
 public class AttemptDTO {
-	
-	@Autowired
-	private AttemptService attemptService;
 	
 	private int id;
 	private int accountId;
@@ -27,11 +20,9 @@ public class AttemptDTO {
 		this.id = a.getId();
 		this.accountId = a.getAccountId();
 		this.quizId = a.getQuizId();
-		this.dateCreated = a.getDateCreated();
 		this.score = a.getScore();
-		this.isComplete = a.getIsComplete();		
-		answers = attemptService.getAttemptAnswersByAttempt(a)
-				.stream().map(e -> new AttemptAnswerDTO(e)).collect(Collectors.toSet());
+		this.isComplete = a.getIsComplete();
+		this.dateCreated = a.getDateCreated();
 	}
 
 	public AttemptDTO() {

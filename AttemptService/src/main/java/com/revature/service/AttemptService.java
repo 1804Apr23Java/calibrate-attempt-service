@@ -53,8 +53,9 @@ public class AttemptService {
 		return attempts;
 	}
 	
+	@Transactional
 	public Attempt addAttempt(Attempt attempt) {
-		return attempt = attemptRepository.save(attempt);
+		return attemptRepository.save(attempt);
 	}
 	
 	public Attempt updateAttempt(int id, double score) {
@@ -64,10 +65,18 @@ public class AttemptService {
 	}
 	
 	public void deleteAttempt(int id) {
-		attemptRepository.delete(id);
+		attemptRepository.deleteById(id);
 	}
 	
 	public Set<AttemptAnswer> getAttemptAnswersByAttempt(Attempt a) {
 		return attemptAnswerRepository.findByAttempt(a);
+	}
+	
+	public AttemptAnswer addAttemptAnswer(AttemptAnswer a) {
+		return attemptAnswerRepository.save(a);
+	}
+	
+	public void deleteAttemptAnswerById(int id) {
+		attemptAnswerRepository.deleteById(id);
 	}
 }

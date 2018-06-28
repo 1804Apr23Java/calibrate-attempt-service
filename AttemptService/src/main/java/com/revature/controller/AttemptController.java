@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,12 @@ public class AttemptController {
 	@GetMapping("/{id}")
 	public ResponseEntity<AttemptDTO> getAttemptById(@PathVariable int id) {
 		return new ResponseEntity<AttemptDTO>(new AttemptDTO(attemptService.getAttemptById(id)), HttpStatus.OK);
+	}
+	
+	@GetMapping("/attemptanswers/{id}")
+	public ResponseEntity<Set<AttemptAnswerDTO>> getAttemptAnswersByAttemptId(@PathVariable int id) {
+		Set<AttemptAnswer> a = attemptService.getAttemptAnswersByAttempt(attemptService.getAttemptById(id));
+		return new ResponseEntity<Set<AttemptAnswerDTO>>(a.stream().map(at -> new AttemptAnswerDTO(at)).collect(Collectors.toSet()), HttpStatus.OK);
 	}
 	
 	@GetMapping("/complete/{accountId}") 
@@ -69,30 +76,13 @@ public class AttemptController {
 	@PostMapping(path ="/add")
 	public ResponseEntity<AttemptDTO> addAttempt(@RequestBody AttemptDTO attempt) {
 		Attempt a = attemptService.addAttempt(new Attempt(attempt));
-		/*
-		 * Set<AnswerDTO> ansd = new HashSet<AnswerDTO>();
-		answerService.getAnswersByQuestion(q).forEach((etd) -> {
-			ansd.add(new AnswerDTO(etd));
-		});
-		 */	
-		
-		Set<AttemptAnswerDTO> aDTOAnswers = new HashSet<AttemptAnswerDTO>();
-		attemptService.getAttemptAnswersByAttempt(a).forEach((atd) -> {
-			aDTOAnswers.add(new AttemptAnswerDTO(atd));
-		});
-				
-		Set<AttemptAnswer> aAnswers = new HashSet<AttemptAnswer>();
-		for(AttemptAnswerDTO aDTO : aDTOAnswers) {
-			aAnswers.add(new AttemptAnswer(aDTO, a));
-		}
-		
-		a.setAttemptAnswers(aAnswers);
-		attemptService.addAttempt(a);
-		
-		//a.setAttemptAnswers(aAnswers.stream().map(a->new AttemptAnswerDTO(a).collect(Collectors.toSet());
-		System.out.println(a.toString());
-		AttemptDTO aDTO = new AttemptDTO(a);
-		return new ResponseEntity<AttemptDTO>(aDTO, HttpStatus.OK);
+		return new ResponseEntity<AttemptDTO>(new AttemptDTO(a), HttpStatus.OK);
 	}
 	
+	@PostMapping("/add/attemptanswer")
+	public ResponseEntity<AttemptAnswerDTO> addAttemptAnswer(@RequestBody AttemptAnswerDTO attemptAnswser) {
+		Attempt att = attemptService.getAttemptById(attemptAnswser.getAttemptId());
+		AttemptAnswer a = attemptService.addAttemptAnswer(new AttemptAnswer(attemptAnswser, att));
+		return new ResponseEntity<AttemptAnswerDTO>(new AttemptAnswerDTO(a), HttpStatus.OK);
+	}
 }

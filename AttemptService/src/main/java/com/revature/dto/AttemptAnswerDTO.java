@@ -6,10 +6,26 @@ public class AttemptAnswerDTO {
 	
 	private int id;
 	private int answerId;
-	private boolean isCorrent;
+	private boolean isCorrect;
+	private Integer attemptId;
 	
 	
 	
+	public AttemptAnswerDTO(int answerId, boolean isCorrect, Integer attemptId) {
+		super();
+		this.answerId = answerId;
+		this.isCorrect = isCorrect;
+		this.attemptId = attemptId;
+	}
+
+	public Integer getAttemptId() {
+		return attemptId;
+	}
+
+	public void setAttemptId(Integer attemptId) {
+		this.attemptId = attemptId;
+	}
+
 	public AttemptAnswerDTO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -18,14 +34,15 @@ public class AttemptAnswerDTO {
 	public AttemptAnswerDTO(AttemptAnswer a) {
 		this.id = a.getId();
 		this.answerId = a.getAnswerId();
-		this.isCorrent = a.getIsCorrect();
+		this.isCorrect = a.getIsCorrect();
+		this.attemptId = a.getAttempt().getId();
 	}
 	
 	public AttemptAnswerDTO(int id, int answerId, boolean isCorrent) {
 		super();
 		this.id = id;
 		this.answerId = answerId;
-		this.isCorrent = isCorrent;
+		this.isCorrect = isCorrent;
 	}
 
 	
@@ -41,13 +58,14 @@ public class AttemptAnswerDTO {
 	public void setAnswerId(int answerId) {
 		this.answerId = answerId;
 	}
-	public boolean isCorrent() {
-		return isCorrent;
-	}
-	public void setCorrent(boolean isCorrent) {
-		this.isCorrent = isCorrent;
+
+	public boolean getIsCorrect() {
+		return isCorrect;
 	}
 
+	public void setIsCorrect(boolean isCorrect) {
+		this.isCorrect = isCorrect;
+	}
 	
 
 }
