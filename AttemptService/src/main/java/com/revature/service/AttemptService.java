@@ -1,6 +1,7 @@
 package com.revature.service;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.beans.Attempt;
+import com.revature.beans.AttemptAnswer;
+import com.revature.repository.AttemptAnswerRepository;
 import com.revature.repository.AttemptRepository;
 
 @Service
@@ -16,6 +19,9 @@ public class AttemptService {
 
 	@Autowired
 	private AttemptRepository attemptRepository;
+	
+	@Autowired 
+	private AttemptAnswerRepository attemptAnswerRepository;
 	
 	public Attempt getAttemptById(int id) {
 		Attempt attempt = attemptRepository.findAttemptById(id);
@@ -59,5 +65,9 @@ public class AttemptService {
 	
 	public void deleteAttempt(int id) {
 		attemptRepository.delete(id);
+	}
+	
+	public Set<AttemptAnswer> getAttemptAnswersByAttempt(Attempt a) {
+		return attemptAnswerRepository.findByAttempt(a);
 	}
 }

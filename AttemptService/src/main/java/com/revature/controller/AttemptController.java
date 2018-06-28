@@ -1,7 +1,10 @@
 package com.revature.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collector;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 
 import com.revature.beans.Attempt;
+import com.revature.beans.AttemptAnswer;
+
+import com.revature.dto.AttemptAnswerDTO;
 import com.revature.dto.AttemptDTO;
+
 import com.revature.service.AttemptService;
 
 @CrossOrigin
@@ -58,4 +65,34 @@ public class AttemptController {
 		}
 		return new ResponseEntity<List<AttemptDTO>>(attempts, HttpStatus.OK);
 	}
+	
+	@PostMapping(path ="/add")
+	public ResponseEntity<AttemptDTO> addAttempt(@RequestBody AttemptDTO attempt) {
+		Attempt a = attemptService.addAttempt(new Attempt(attempt));
+		/*
+		 * Set<AnswerDTO> ansd = new HashSet<AnswerDTO>();
+		answerService.getAnswersByQuestion(q).forEach((etd) -> {
+			ansd.add(new AnswerDTO(etd));
+		});
+		 */	
+		
+		Set<AttemptAnswerDTO> aDTOAnswers = new HashSet<AttemptAnswerDTO>();
+		attemptService.getAttemptAnswersByAttempt(a).forEach((atd) -> {
+			aDTOAnswers.add(new AttemptAnswerDTO(atd));
+		});
+				
+		Set<AttemptAnswer> aAnswers = new HashSet<AttemptAnswer>();
+		for(AttemptAnswerDTO aDTO : aDTOAnswers) {
+			aAnswers.add(new AttemptAnswer(aDTO, a));
+		}
+		
+		a.setAttemptAnswers(aAnswers);
+		attemptService.addAttempt(a);
+		
+		//a.setAttemptAnswers(aAnswers.stream().map(a->new AttemptAnswerDTO(a).collect(Collectors.toSet());
+		System.out.println(a.toString());
+		AttemptDTO aDTO = new AttemptDTO(a);
+		return new ResponseEntity<AttemptDTO>(aDTO, HttpStatus.OK);
+	}
+	
 }

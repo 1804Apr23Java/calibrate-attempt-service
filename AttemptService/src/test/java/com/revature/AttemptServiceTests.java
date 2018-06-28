@@ -18,54 +18,78 @@ import com.revature.repository.AttemptRepository;
 import com.revature.service.AttemptService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@Sql("classpath:populatedb.sql")
 @SpringBootTest
 public class AttemptServiceTests {
 
-	private AttemptRepository ar;
 	
-	@Autowired AttemptService as;
+	
+	@Autowired
+	AttemptService attemptService;
 	
 	@Test
 	public void testInsertAttempt() {
 		Attempt a = new Attempt(100, 100);
-		as.addAttempt(a);
-		assertNotNull(as.getAttemptsByUser(100));
+		Attempt b = attemptService.addAttempt(a);
+		// assertNotNull(attemptService.getAttemptsByUser(100));
+		assertEquals(100, b.getAccountId());
 	}
 	
 	@Test
 	public void testUpdateAttempt() {
-		as.updateAttempt(1, 100);
-		assertEquals(100.00, as.getAttemptById(1).getScore(),0);
+		Attempt a = new Attempt(100, 100);
+		Attempt b = attemptService.addAttempt(a);
+		attemptService.updateAttempt(b.getId(), 100);		
+		assertEquals(100.00, attemptService.getAttemptById(b.getId()).getScore(), 0);
 	}
 	
 	@Test
 	public void testDeleteAttempt() {
-		as.deleteAttempt(1);
-		assertNull(as.getAttemptById(1));
+		Attempt a = new Attempt(100, 100);
+		Attempt b = attemptService.addAttempt(a);
+		attemptService.deleteAttempt(b.getId());
+		assertNull(attemptService.getAttemptById(b.getId()));
 	}
-	
+
 	@Test
 	public void testGetAttemptById() {
-		Attempt a = as.getAttemptById(2);
-		assertEquals(2, a.getId());
+		Attempt a = new Attempt(100, 100);
+		Attempt b = attemptService.addAttempt(a);
+		Attempt c = attemptService.getAttemptById(b.getId());
+		assertEquals(b.getAccountId(), c.getAccountId());
 	}
-	
+
 	@Test
 	public void testGetCompleteAttemptsByUser() {
-		List<Attempt> a = as.getCompleteAttemptsByUser(2);
-		assertEquals(0, a.size());
+			
+		attemptService.addAttempt(new Attempt(100, 1,true));
+		attemptService.addAttempt( new Attempt(100, 2,true));
+		attemptService.addAttempt( new Attempt(100, 3,true));		
+		List<Attempt> userAttempts = attemptService.getCompleteAttemptsByUser(100);
+		assertEquals(3, userAttempts.size());
 	}
-	
+
 	@Test
 	public void testGetIncompleteAttemptsByUser() {
-		List<Attempt> a = as.getIncompleteAttemptsByUser(2);
+		attemptService.addAttempt(new Attempt(101, 1));
+		attemptService.addAttempt(new Attempt(101, 2));
+		attemptService.addAttempt(new Attempt(101, 3));
+		List<Attempt> userAttempts = attemptService.getIncompleteAttemptsByUser(101);
+		assertEquals(3, userAttempts.size());
+	}
+
+	@Test
+	public void testGetCompleteAttemptsByUserAndQuiz() {
+		attemptService.addAttempt(new Attempt(102, 1,true));
+		List<Attempt> a = attemptService.getCompleteAttemptsByUserAndQuiz(102, 1);
+		assertEquals(1, a.size());
+	}
+	@Test
+	public void testGetInCompleteAttemptsByUserAndQuiz() {
+		attemptService.addAttempt(new Attempt(103, 1));
+		List<Attempt> a = attemptService.getIncompleteAttemptsByUser(103);
 		assertEquals(1, a.size());
 	}
 	
-	@Test
-	public void testGetCompleteAttemptsByUserAndQuiz() {
-		List<Attempt> a = as.getCompleteAttemptsByUserAndQuiz(1, 20);
-		assertEquals(1, a.size());
-	}
+	
+	
 }

@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.revature.dto.AttemptAnswerDTO;
+
 @Entity
 @Table(name = "ATTEMPT_ANSWER")
 public class AttemptAnswer {
@@ -20,6 +22,17 @@ public class AttemptAnswer {
 	private int answerId;
 	private boolean isCorrect; //fetch from quiz service
 	
+	public AttemptAnswer() {
+		super();
+	}
+	
+	public AttemptAnswer(AttemptAnswerDTO a, Attempt att) {
+		this.id = a.getId();
+		this.answerId = a.getAnswerId();
+		this.isCorrect = a.isCorrent();
+		this.attempt = att;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attemptAnswerSequence")
 	@SequenceGenerator(allocationSize = 1, name = "attemptAnswerSequence", sequenceName = "SQ_ATTEMPT_ANSWER_PK")

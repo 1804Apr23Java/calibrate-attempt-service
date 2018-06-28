@@ -17,6 +17,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.revature.dto.AttemptDTO;
+
 @Entity
 @Table(name = "ATTEMPT")
 public class Attempt {
@@ -49,6 +51,20 @@ public class Attempt {
 		this.accountId = accountId;
 		this.quizId = quizId;
 		this.attemptAnswers = new HashSet<AttemptAnswer>();
+	}
+	
+	public Attempt(int accountId, int quizId, boolean isComplete) {
+		super();
+		this.accountId = accountId;
+		this.quizId = quizId;
+		this.isComplete=isComplete;
+		this.attemptAnswers = new HashSet<AttemptAnswer>();
+	}
+	
+	public Attempt(AttemptDTO a) {
+		this.accountId = a.getAccountId();
+		this.quizId = a.getQuizId();
+		this.isComplete = a.isComplete();
 	}
 	
 	public Attempt() {
