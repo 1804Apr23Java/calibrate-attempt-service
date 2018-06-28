@@ -39,7 +39,7 @@ public class AttemptControllerTest {
 		
 		RestAssured.port = 8079;
 		RequestSpecification request = RestAssured.given();	
-		Response response = request.get("/" + a.getId());
+		Response response = request.get("/attempt/" + a.getId());
 			
 		assertEquals(200, response.getStatusCode());
 		
@@ -59,7 +59,7 @@ public class AttemptControllerTest {
 		request.contentType("application/json");
 		AttemptDTO a = new AttemptDTO(new Attempt(42, 6969));
 		request.body(a);
-		Response response = request.post("/add");
+		Response response = request.post("/attempt/add");
 		
 		AttemptDTO responseDTO = new ObjectMapper().readValue(response.asString(), AttemptDTO.class);
 		assertEquals(a.getAccountId(), responseDTO.getAccountId());
@@ -76,7 +76,7 @@ public class AttemptControllerTest {
 		request.contentType("application/json");
 		AttemptAnswerDTO aDTO = new AttemptAnswerDTO(5, true, a.getId());
 		request.body(aDTO);
-		Response response = request.post("/add/attemptanswer");
+		Response response = request.post("/attempt/add/attemptanswer");
 		
 		AttemptAnswerDTO responseAnswer = new ObjectMapper().readValue(response.asString(), AttemptAnswerDTO.class);
 		assertEquals(aDTO.getAnswerId(), responseAnswer.getAnswerId());
@@ -102,7 +102,7 @@ public class AttemptControllerTest {
 		
 		RestAssured.port = 8079;
 		RequestSpecification request = RestAssured.given();
-		Response response = request.get("/attemptanswers/" + a.getId());
+		Response response = request.get("/attempt/attemptanswers/" + a.getId());
 		
 		Set<AttemptAnswerDTO> attemptAnswerResp = new ObjectMapper().readValue(response.asString(), HashSet.class);
 		assertEquals(s.size(), attemptAnswerResp.size());
