@@ -1,0 +1,28 @@
+spring:
+ application:
+   name: attempt
+ datasource:
+   url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1
+   driver-class-name: org.h2.Driver
+ h2:
+   console:
+     enabled: true
+     path: /h2-console
+ jpa:
+   properties:
+     hibernate:
+       show-sql: true
+       format-sql: true
+       ddl-auto: update
+ jackson:
+   serialization:
+     fail-on-empty-beans: false
+server:
+ port: 8079
+eureka:
+ instance:
+   hostname: ${HOSTNAME}
+   preferIpAddress: false
+ client:
+   service-url:
+     defaultZone: ${EUREKA_HOME}
