@@ -31,6 +31,12 @@ public class AttemptAnswer {
 		this.isCorrect = isCorrect;
 	}
 
+	public AttemptAnswer(Attempt attempt, int answerId, boolean isCorrect) {
+		super();
+		this.attempt = attempt;
+		this.answerId = answerId;
+		this.isCorrect = isCorrect;
+	}
 
 
 	public AttemptAnswer(AttemptAnswerDTO a, Attempt att) {

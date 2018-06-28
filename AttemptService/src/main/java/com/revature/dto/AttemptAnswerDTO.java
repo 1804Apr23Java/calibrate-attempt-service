@@ -66,6 +66,41 @@ public class AttemptAnswerDTO {
 	public void setIsCorrect(boolean isCorrect) {
 		this.isCorrect = isCorrect;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + answerId;
+		result = prime * result + ((attemptId == null) ? 0 : attemptId.hashCode());
+		result = prime * result + id;
+		result = prime * result + (isCorrect ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AttemptAnswerDTO other = (AttemptAnswerDTO) obj;
+		if (answerId != other.answerId)
+			return false;
+		if (attemptId == null) {
+			if (other.attemptId != null)
+				return false;
+		} else if (!attemptId.equals(other.attemptId))
+			return false;
+		if (id != other.id)
+			return false;
+		if (isCorrect != other.isCorrect)
+			return false;
+		return true;
+	}
+	
 	
 
 }

@@ -3,6 +3,8 @@ package com.revature.controller;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -84,4 +86,32 @@ public class AttemptControllerTest {
 		attemptService.deleteAttempt(a.getId());
 	}
 
+	@Test
+	public void getAttemptAnswersByAttemptIdTest() throws JsonParseException, JsonMappingException, IOException {
+		Attempt a = attemptService.addAttempt(new Attempt(1234, 234));
+		AttemptAnswer b = attemptService.addAttemptAnswer(new AttemptAnswer(a, 45, true));
+		AttemptAnswer c = attemptService.addAttemptAnswer(new AttemptAnswer(a, 45, true));
+		AttemptAnswer d = attemptService.addAttemptAnswer(new AttemptAnswer(a, 45, true));
+		AttemptAnswer e = attemptService.addAttemptAnswer(new AttemptAnswer(a, 45, true));
+		
+		Set<AttemptAnswerDTO> s = new HashSet<>();
+		s.add(new AttemptAnswerDTO(b));
+		s.add(new AttemptAnswerDTO(c));
+		s.add(new AttemptAnswerDTO(d));
+		s.add(new AttemptAnswerDTO(e));
+		
+		RestAssured.port = 8079;
+		RequestSpecification request = RestAssured.given();
+		Response response = request.get("/attempt/attemptanswers/" + a.getId());
+		
+		Set<AttemptAnswerDTO> attemptAnswerResp = new ObjectMapper().readValue(response.asString(), HashSet.class);
+		assertEquals(s.size(), attemptAnswerResp.size());
+		
+		attemptService.deleteAttemptAnswerById(b.getId());
+		attemptService.deleteAttemptAnswerById(c.getId());
+		attemptService.deleteAttemptAnswerById(d.getId());
+		attemptService.deleteAttemptAnswerById(e.getId());
+		attemptService.deleteAttempt(a.getId());
+	}
+	
 }

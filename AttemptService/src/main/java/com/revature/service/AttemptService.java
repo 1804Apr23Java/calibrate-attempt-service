@@ -79,4 +79,8 @@ public class AttemptService {
 	public void deleteAttemptAnswerById(int id) {
 		attemptAnswerRepository.deleteById(id);
 	}
+	
+	public AttemptAnswer getAttemptAnswerById(int id) {
+		return attemptAnswerRepository.findById(id).get();
+	}
 }
