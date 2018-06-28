@@ -127,7 +127,11 @@ public class AttemptController {
 
 	public int scoreAttempt(List<AttemptAnswerDTO> answers) {
 		int numCorrect = 0;
-		answers.forEach((a) -> { if(a.getIsCorrect()) numCorrect++; });
+		for(int i = 0; i < answers.size(); i++) {
+			if(answers.get(i).getIsCorrect()) {
+				numCorrect++;
+			}
+		}
 		return numCorrect;
 	}
 }
