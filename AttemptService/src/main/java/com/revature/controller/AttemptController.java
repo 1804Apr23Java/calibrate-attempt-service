@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.revature.beans.Attempt;
 import com.revature.beans.AttemptAnswer;
@@ -105,6 +107,22 @@ public class AttemptController {
 		Attempt att = attemptService.getAttemptById(attemptAnswser.getAttemptId());
 		AttemptAnswer a = attemptService.addAttemptAnswer(new AttemptAnswer(attemptAnswser, att));
 		return new ResponseEntity<AttemptAnswerDTO>(new AttemptAnswerDTO(a), HttpStatus.OK);
+	}
+	
+	@PutMapping("/score/{id}")
+	public ResponseEntity<AttemptDTO> scoreAttempt(@PathVariable int id) {
+		Attempt a = attemptService.getAttemptById(id);
+		Set<AttemptAnswer> attemptAnswers = attemptService.getAttemptAnswersByAttempt(a);
+		
+		RestTemplate restTemplate = new RestTemplate();
+		QuizDTO quiz = restTemplate.getForObject("http://ec2-35-171-24-66.compute-1.amazonaws.com:8765/quiz/quiz/" + a.getQuizId(), QuizDTO.class);
+		
+		List<AttemptAnswerDTO> attAnsDtos = attemptAnswers.stream().map(d -> new AttemptAnswerDTO(d)).collect(Collectors.toList());
+		double score = (double) scoreAttempt(quiz, attAnsDtos) / quiz.getQuestions().size();
+		
+		a = attemptService.updateAttempt(a.getId(), score);
+		
+		return new ResponseEntity<AttemptDTO>(new AttemptDTO(a), HttpStatus.OK);
 	}
 
 	public int scoreAttempt(QuizDTO quiz, List<AttemptAnswerDTO> answers) {
