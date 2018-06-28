@@ -115,7 +115,7 @@ public class AttemptController {
 		Set<AttemptAnswer> attemptAnswers = attemptService.getAttemptAnswersByAttempt(a);
 		
 		RestTemplate restTemplate = new RestTemplate();
-		QuizDTO quiz = restTemplate.getForObject("http://ec2-35-171-24-66.compute-1.amazonaws.com:8765/quiz/quiz/" + a.getQuizId(), QuizDTO.class);
+		QuizDTO quiz = restTemplate.getForObject("http://ec2-54-86-6-122.compute-1.amazonaws.com:8765/quiz/quiz/" + a.getQuizId(), QuizDTO.class);
 		
 		List<AttemptAnswerDTO> attAnsDtos = attemptAnswers.stream().map(d -> new AttemptAnswerDTO(d)).collect(Collectors.toList());
 		double score = (double) scoreAttempt(quiz, attAnsDtos) / quiz.getQuestions().size();
