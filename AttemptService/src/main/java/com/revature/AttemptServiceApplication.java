@@ -8,6 +8,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.revature.beans.Attempt;
+import com.revature.beans.AttemptAnswer;
 import com.revature.service.AttemptService;
 
 @SpringBootApplication
@@ -23,7 +24,10 @@ public class AttemptServiceApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Attempt a = attemptService.addAttempt(new Attempt(69,420));
-		System.out.println("attempt id = " + a.getId());
+		Attempt a = attemptService.addAttempt(new Attempt(50, 1));
+		AttemptAnswer b = attemptService.addAttemptAnswer(new AttemptAnswer(a, 1, true ));
+		AttemptAnswer c = attemptService.addAttemptAnswer(new AttemptAnswer(a, 5, true ));
+		AttemptAnswer d = attemptService.addAttemptAnswer(new AttemptAnswer(a, 11, false ));
+		AttemptAnswer e = attemptService.addAttemptAnswer(new AttemptAnswer(a, 16, true ));
 	}
 }
