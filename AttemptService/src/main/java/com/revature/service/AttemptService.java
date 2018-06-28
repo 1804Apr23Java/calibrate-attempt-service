@@ -1,5 +1,6 @@
 package com.revature.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -86,5 +87,13 @@ public class AttemptService {
 	
 	public AttemptAnswer getAttemptAnswerById(int id) {
 		return attemptAnswerRepository.findById(id).get();
+	}
+	
+	public Set<Attempt> getAllAttempts() {
+		return new HashSet<Attempt>(attemptRepository.findAll());
+	}
+	
+	public Set<AttemptAnswer> getAllAttemptAnswers() {
+		return new HashSet<AttemptAnswer>(attemptAnswerRepository.findAll());
 	}
 }

@@ -2,6 +2,7 @@ package com.revature.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,6 +45,22 @@ public class AttemptController {
 		Set<AttemptAnswer> a = attemptService.getAttemptAnswersByAttempt(attemptService.getAttemptById(id));
 		return new ResponseEntity<Set<AttemptAnswerDTO>>(
 				a.stream().map(at -> new AttemptAnswerDTO(at)).collect(Collectors.toSet()), HttpStatus.OK);
+	}
+	
+	@GetMapping("/getallattempts")
+	public ResponseEntity<Set<AttemptDTO>> getAllAttempts() {
+		Set<Attempt> a = attemptService.getAllAttempts();
+		Set<AttemptDTO> aa = new HashSet<>();
+		a.forEach((e) -> { aa.add(new AttemptDTO(e)); });
+		return new ResponseEntity<Set<AttemptDTO>>(aa, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getallattemptanswers")
+	public ResponseEntity<Set<AttemptAnswerDTO>> getAllAttemptAnswers() {
+		Set<AttemptAnswer> a = attemptService.getAllAttemptAnswers();
+		Set<AttemptAnswerDTO> aa = new HashSet<>();
+		a.forEach((e) -> { aa.add(new AttemptAnswerDTO(e)); });
+		return new ResponseEntity<Set<AttemptAnswerDTO>>(aa, HttpStatus.OK);
 	}
 
 	@GetMapping("/complete/{accountId}")
