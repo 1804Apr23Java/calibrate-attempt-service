@@ -1,6 +1,6 @@
 spring:
   application:
-    name: quiz
+    name: attempt
   cloud:
     config:
       uri: ${CONFIG_HOME}
