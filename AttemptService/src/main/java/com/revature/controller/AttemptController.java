@@ -26,6 +26,7 @@ import com.revature.service.AttemptService;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/attempt")
 public class AttemptController {
 
 	@Autowired
