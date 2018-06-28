@@ -118,25 +118,16 @@ public class AttemptController {
 		QuizDTO quiz = restTemplate.getForObject("http://ec2-54-86-6-122.compute-1.amazonaws.com:8765/quiz/quiz/" + a.getQuizId(), QuizDTO.class);
 		
 		List<AttemptAnswerDTO> attAnsDtos = attemptAnswers.stream().map(d -> new AttemptAnswerDTO(d)).collect(Collectors.toList());
-		double score = (double) scoreAttempt(quiz, attAnsDtos) / quiz.getQuestions().size();
+		double score = (double) scoreAttempt(attAnsDtos) / (double) quiz.getQuestions().size();
 		
 		a = attemptService.updateAttempt(a.getId(), score);
 		
 		return new ResponseEntity<AttemptDTO>(new AttemptDTO(a), HttpStatus.OK);
 	}
 
-	public int scoreAttempt(QuizDTO quiz, List<AttemptAnswerDTO> answers) {
-		List<Integer> chosenAnswers = answers.stream().map(AttemptAnswerDTO::getAnswerId).collect(Collectors.toList());
+	public int scoreAttempt(List<AttemptAnswerDTO> answers) {
 		int numCorrect = 0;
-		List<QuestionDTO> questions = new ArrayList<QuestionDTO>(quiz.getQuestions());
-		for (QuestionDTO question : questions) {
-			List<Integer> correctAnswers = question.getAnswers().stream().filter(answer -> answer.getIsCorrect())
-					.map(AnswerDTO::getAnswerId).collect(Collectors.toList());
-			Collections.sort(correctAnswers);
-			Collections.sort(chosenAnswers);
-			if (correctAnswers.equals(chosenAnswers))
-				numCorrect++;
-		}
+		answers.forEach((a) -> { if(a.getIsCorrect()) numCorrect++; });
 		return numCorrect;
 	}
 }
