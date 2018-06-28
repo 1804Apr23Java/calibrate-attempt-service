@@ -10,5 +10,5 @@ import com.revature.beans.AttemptAnswer;
 public interface AttemptAnswerRepository extends JpaRepository<AttemptAnswer, Integer> {
 
 	public Set<AttemptAnswer> findByAttempt(Attempt a);
-	
+	public void deleteByAttemptId(Integer id);
 }

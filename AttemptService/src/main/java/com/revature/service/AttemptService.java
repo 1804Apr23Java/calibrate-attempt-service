@@ -80,6 +80,10 @@ public class AttemptService {
 		attemptAnswerRepository.deleteById(id);
 	}
 	
+	public void deleteAttemptAnswerByAttemptId(int id) {
+		attemptAnswerRepository.deleteByAttemptId(id);
+	}
+	
 	public AttemptAnswer getAttemptAnswerById(int id) {
 		return attemptAnswerRepository.findById(id).get();
 	}
